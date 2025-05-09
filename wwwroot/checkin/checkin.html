@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>打卡查詢</title>
+</head>
+<body>
+    <h2>打卡紀錄</h2>
+    <ul id="checkinList"></ul>
+
+    <script>
+        fetch('/api/checkin/all')
+            .then(res => res.json())
+            .then(data => {
+                const ul = document.getElementById('checkinList');
+                data.forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = `${item.employeeName} - ${item.checkinTime}`;
+                    ul.appendChild(li);
+                });
+            });
+    </script>
+</body>
+</html>

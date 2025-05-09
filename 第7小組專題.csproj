@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\Login\" />
+    <Folder Include="Controllers\Vote\" />
+    <Folder Include="Models\Login\" />
+    <Folder Include="Models\Vote\" />
+    <Folder Include="Repository\Login\" />
+    <Folder Include="Repository\Vote\" />
+    <Folder Include="Services\Login\" />
+    <Folder Include="Services\Vote\" />
+  </ItemGroup>
+
+</Project>
