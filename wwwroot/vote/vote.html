@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>投票頁面</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding-top: 40px;
+    }
+    .container {
+      width: 400px;
+    }
+    .bar {
+      height: 20px;
+      background: lightblue;
+      margin-top: 5px;
+    }
+    input, button {
+      width: 100%;
+      padding: 8px;
+      margin: 8px 0;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 id="topicTitle">載入中...</h2>
+    <p id="voteHint" style="font-size: 0.9em; color: gray;"></p>
+    <div id="voteSection"></div>
+    <button onclick="window.location.href='main.html'">回主頁</button>
+  </div>
+  <script src="js/storage.js"></script>
+  <script src="js/vote.js"></script>
+  <script>renderVotePage();</script>
+</body>
+</html>
