@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>投票系統</title>
+  <!-- 頁面樣式設計 -->
   <style>
     body { 
         display: flex; 
@@ -60,28 +61,30 @@
   </style>
 </head>
 <body>
+<!-- 主內容容器 -->  
 <div class="container">
-  <h2>歡迎，<span id="userDisplay"></span>！
-    <button onclick="logout()" style="width:auto; padding: 4px 12px;">登出</button>
-  </h2>
+  <h2>投票主題管理</h2>
+  <!-- 建立新主題區塊 -->
   <h3>建立投票主題</h3>
   主題：<input type="text" id="newTopic">
   匿名投票：<input type="checkbox" id="anonCheckbox"><br>
+  <!-- 初始選項輸入欄位 -->
   <div id="optionContainer" class="option-block">
     <input type="text" class="newOpt" placeholder="選項1">
     <input type="text" class="newOpt" placeholder="選項2">
   </div>
+  <!-- 建立與新增選項的按鈕 -->
   <div class="button-row">
     <button onclick="createTopic()">建立主題</button>
-    <button onclick="addOption()">新增選項</button>
-    
+    <button onclick="addOption()">新增選項</button> 
   </div>
+  <!-- 列出所有主題 -->
   <h3>主題列表</h3>
   <ul id="topicList"></ul>
-  <div id="voteSection"></div>
+  
 </div>
+<!-- 載入工具、登入、主題處理、投票功能腳本 -->
 <script src="js/storage.js"></script>
-<script src="js/auth.js"></script>
 <script src="js/vote.js"></script>
 <script src="js/main.js"></script>
 </body>
