@@ -1,7 +1,7 @@
 // ---------------資料初始化（從 localStorage 讀取）---------------
 const user = localStorage.getItem("current_user");  // 取得目前使用者名稱
 const index = localStorage.getItem("current_vote_index");  // 目前選擇的投票主題索引
-const users = JSON.parse(localStorage.getItem("vote_users") || "{}");  // 所有用戶與其投票資料
+const users = getData("vote_users")  // 取出所有投票使用者資料
 const topic = users[user]?.votes[index];  // 取得該使用者目前投票主題物件
 
 // ---------------主要畫面渲染函式---------------
@@ -45,8 +45,8 @@ function submitVote() {
   if (!topic.anonymous) {
     topic.voters[user] = selected.value;
   }
-  // 存回 localStorage
-  localStorage.setItem("vote_users", JSON.stringify(users));
+  // 呼叫 storage.js
+  setData("vote_users", users);
   renderVotePage();  // 重新渲染畫面（會連結果一起更新）
 }
 
