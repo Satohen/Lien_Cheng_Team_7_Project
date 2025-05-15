@@ -1,3 +1,14 @@
+// --------------------- 使用者資料初始化(測試使用)（防呆處理） ---------------------
+let user = localStorage.getItem("current_user");
+if (!user) {
+  user = "test";
+  localStorage.setItem("current_user", user);
+}
+let users = getData("vote_users");
+if (!users[user]) {
+  users[user] = { votes: [] };
+  setData("vote_users", users);
+}
 // --------------------- 使用者名稱顯示（防呆處理） ---------------------
 const name = localStorage.getItem("current_user");
 const el = document.getElementById("userDisplay");
