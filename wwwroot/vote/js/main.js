@@ -1,28 +1,33 @@
-document.getElementById("userDisplay").innerText = localStorage.getItem("current_user");
+// --------------------- 使用者名稱顯示（防呆處理） ---------------------
+const name = localStorage.getItem("current_user");
+const el = document.getElementById("userDisplay");
+if (el && name) el.innerText = name;
+// ---初始化主題列表---
 renderTopics();
-
+// --------------------- 跳轉到投票頁面 ---------------------
 function goToVote(index) {
-  localStorage.setItem("current_vote_index", index);
-  window.location.href = "vote.html";
+  localStorage.setItem("current_vote_index", index);  // 設定目前選擇的主題 index
+  window.location.href = "vote.html";  // 跳轉到投票頁
 }
-
+// --------------------- 建立新主題 ---------------------
 function createTopic() {
   const user = localStorage.getItem("current_user");
   const topic = document.getElementById("newTopic").value.trim();
-  const opts = Array.from(document.querySelectorAll(".newOpt")).map(e => e.value.trim()).filter(Boolean);
+  const opts = Array.from(document.querySelectorAll(".newOpt"))
+                    .map(e => e.value.trim())
+                    .filter(Boolean);  // 篩掉空選項
   const isAnon = document.getElementById("anonCheckbox").checked;
   if (!topic || opts.length < 2) return alert("請填寫主題與至少2個選項");
 
   const users = getData("vote_users");
   const options = {};
-  opts.forEach(o => options[o] = 0);
+  opts.forEach(o => options[o] = 0);  // 每個選項初始票數設為 0
 
   users[user].votes.push({ topic, options, voters: {}, anonymous: isAnon });
-  setData("vote_users", users);
-  renderTopics();
+  setData("vote_users", users);  // 儲存到 localStorage
+  renderTopics();  // 重新顯示主題列表
 }
-
-
+// --------------------- 渲染所有主題列表 ---------------------
 function renderTopics() {
   const user = localStorage.getItem("current_user");
   const users = getData("vote_users");
@@ -49,12 +54,12 @@ function renderTopics() {
     list.appendChild(li);
   });
 }
-
+// --------------------- 展開/收合 主題功能選單 ---------------------
 function toggleMenu(index) {
   const menu = document.getElementById("menu" + index);
   menu.style.display = menu.style.display === "none" ? "block" : "none";
 }
-
+// --------------------- 刪除主題 ---------------------
 function deleteTopic(index) {
   const user = localStorage.getItem("current_user");
   const users = getData("vote_users");
@@ -64,7 +69,7 @@ function deleteTopic(index) {
     renderTopics();
   }
 }
-
+// --------------------- 快速編輯主題名稱 ---------------------
 function editTopic(index) {
   const user = localStorage.getItem("current_user");
   const users = getData("vote_users");
@@ -75,19 +80,19 @@ function editTopic(index) {
     renderTopics();
   }
 }
-
+// --------------------- 顯示完整編輯表單 ---------------------
 function showEditForm(index) {
   const user = localStorage.getItem("current_user");
   const users = getData("vote_users");
   const topic = users[user].votes[index];
   const container = document.getElementById("editForm" + index);
   container.innerHTML = "";
-
+  // 編輯主題名稱
   const titleInput = document.createElement("input");
   titleInput.value = topic.topic;
   container.appendChild(document.createTextNode("主題："));
   container.appendChild(titleInput);
-
+  // 編輯選項
   const optionInputs = [];
   Object.keys(topic.options).forEach((opt, idx) => {
     const input = document.createElement("input");
@@ -96,7 +101,7 @@ function showEditForm(index) {
     container.appendChild(document.createTextNode(`選項${idx + 1}：`));
     container.appendChild(input);
   });
-
+  // 新增選項按鈕
   const addBtn = document.createElement("button");
   addBtn.innerText = "新增選項";
   addBtn.onclick = () => {
@@ -105,7 +110,7 @@ function showEditForm(index) {
     container.insertBefore(newInput, addBtn);
     optionInputs.push({ old: null, input: newInput });
   };
-
+  // 儲存修改按鈕
   const saveBtn = document.createElement("button");
   saveBtn.innerText = "儲存修改";
   saveBtn.onclick = () => {
@@ -127,8 +132,7 @@ function showEditForm(index) {
   container.appendChild(saveBtn);
   container.style.display = "block";
 }
-
-
+// --------------------- 新增選項欄位（建立主題時） ---------------------
 function addOption() {
   const container = document.getElementById("optionContainer");
   const count = container.querySelectorAll("input").length + 1;
