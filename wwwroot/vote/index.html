@@ -2,106 +2,97 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>投票系統</title>
-  <!-- 頁面樣式設計 -->
+  <title>投票主題管理</title>
   <style>
-    body { 
-        display: flex; 
-        justify-content: center; 
-        align-items: flex-start; 
-        padding-top: 40px; 
-        font-family: sans-serif; 
-      }
-    .container { 
-        width: 350px; 
-      }
-    h2, h3 { 
-        text-align: center; 
-      }
-    input, button { 
-        width: 100%; 
-        padding: 8px; 
-        margin: 6px 0; 
-        box-sizing: border-box; 
-      }
-    .bar { 
-        height: 20px; 
-        background: lightblue; 
-        margin-top: 5px; 
-      }
-    .button-row { 
-        display: flex; 
-        justify-content: space-between; 
-        gap: 10px; 
-      }
-    .button-row button { 
-        width: 50%; 
-      }
-    ul#topicList button {
-        width: 100%;
-        margin-bottom: 5px;
-      }
-     ul#topicList {
-        list-style: none;
-        padding: 0;
-      }
-     .topic-card {
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        padding: 12px;
-        margin-bottom: 15px;
-        background-color: #f9f9f9;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        text-align: center;
-      }
-     ul#topicList button {
-        width: 100%;
-        margin-bottom: 5px;
-      }
-      .checkbox-row {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin: 10px 0;
-        font-size: 1rem;
-      }
-      .checkbox-row input[type="checkbox"] {
-        width: 18px;
-        height: 18px;
-        accent-color: #007bff;
-        cursor: pointer;
-      }
+    body {
+      font-family: sans-serif;
+      padding: 40px;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      margin: 6px 0;
+      box-sizing: border-box;
+    }
+
+    .option-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .option-row input {
+      flex: 1;
+      height: 36px;
+      padding: 6px 8px;
+    }
+
+    .option-row button {
+      height: 36px;
+      font-size: 14px;
+      padding: 6px 12px;
+      white-space: nowrap;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 10px 0;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .button-row button {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    .topic-card {
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 12px;
+      margin: 12px 0;
+    }
+
+    .topic-card button {
+      margin: 4px 6px 0 0;
+      padding: 6px 12px;
+      font-size: 14px;
+    }
+      
   </style>
 </head>
 <body>
-<!-- 主內容容器 -->  
-<div class="container">
-  <h2>投票主題管理</h2>
-  <!-- 建立新主題區塊 -->
-  <h3>建立投票主題</h3>
-  主題：<input type="text" id="newTopic">
-  <div class="checkbox-row">
-    <label for="anonCheckbox">匿名投票: </label>
-    <input type="checkbox" id="anonCheckbox">
+  <h2 style="text-align: center">建立新主題</h2>
+  <div style="display: flex; align-items: center; gap: 10px;">
+      <label for="newTopic" style="white-space: nowrap;">主題：</label>
+      <input id="newTopic" type="text" style="flex: 1;">
   </div>
-  <!-- 初始選項輸入欄位 -->
-  <div id="optionContainer" class="option-block">
-    <input type="text" class="newOpt" placeholder="選項1">
-    <input type="text" class="newOpt" placeholder="選項2">
+  <div class="checkbox-row" style="display: flex; align-items: center; gap: 10px;">
+      <label for="anonCheckbox" style="white-space: nowrap">匿名投票：</label>
+      <input type="checkbox" id="anonCheckbox" style="transform: scale(1.4);">
   </div>
-  <!-- 建立與新增選項的按鈕 -->
-  <div class="button-row">
-    <button onclick="createTopic()">建立主題</button>
-    <button onclick="addOption()">新增選項</button> 
-  </div>
-  <!-- 列出所有主題 -->
-  <h3>主題列表</h3>
-  <ul id="topicList"></ul>
-  
-</div>
-<!-- 載入工具、登入、主題處理、投票功能腳本 -->
-<script src="./js/storage.js"></script>
-<script src="./js/vote.js"></script>
-<script src="./js/main.js"></script>
+    <div id="optionContainer"></div>
+    <div class="button-row">
+      <button onclick="createTopic()">建立主題</button>
+      <button onclick="addOption()">新增選項</button>
+    </div>
+
+  <h2 id="topicHeader">主題列表</h2>
+  <div id="topicList"></div>
+
+  <script src="./js/storage.js"></script>
+  <script src="./js/vote.js"></script>
+  <script src="./js/main.js"></script>
 </body>
 </html>
