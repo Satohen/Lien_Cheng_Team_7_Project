@@ -1,69 +1,99 @@
-// ---------------資料初始化（從 localStorage 讀取）---------------
-const voteuser = localStorage.getItem("current_user");  // 取得目前使用者名稱
-const voteindex = localStorage.getItem("current_vote_index");  // 目前選擇的投票主題索引
-const voteusers = getData("vote_users")  // 取出所有投票使用者資料
-const votetopic = voteusers[voteuser]?.votes[voteindex];  // 取得該使用者目前投票主題物件
+// ✅ vote.js — 與 main.js 結構整合、功能正確的投票頁腳本
 
-// ---------------主要畫面渲染函式---------------
+// ------------------ 初始化 ------------------
+const voteUser = localStorage.getItem("current_user");
+const voteIndex = parseInt(localStorage.getItem("vote_index"));
+const voteUsers = getData("vote_users");
+const voteTopic = voteUsers[voteUser]?.votes[voteIndex];
+
+// ------------------ 渲染投票畫面 ------------------
 function renderVotePage() {
-  if (!votetopic) {
-    // 若找不到投票主題，顯示錯誤訊息
-    document.getElementById("voteSection").innerHTML = "<p>找不到主題</p>";
+  const titleEl = document.getElementById("topicTitle");
+  const hintEl = document.getElementById("voteHint");
+  const sectionEl = document.getElementById("voteSection");
+  const resultEl = document.getElementById("voteResult");
+
+  // 清空所有欄位
+  titleEl.innerText = "";
+  hintEl.innerText = "";
+  sectionEl.innerHTML = "";
+  resultEl.innerHTML = "";
+
+  if (!voteTopic) {
+    titleEl.innerText = "找不到主題";
     return;
   }
-  // 顯示投票主題與投票提示
-  document.getElementById("topicTitle").innerText = votetopic.topic;
-  document.getElementById("voteHint").innerText =
-    votetopic.anonymous ? "匿名投票（可重複投票）" : "記名投票（僅能投一次）";
 
-  const container = document.getElementById("voteSection");
-  container.innerHTML = "";   // 清空畫面內容
-  // 動態產生所有選項的 radio button    
-  Object.keys(votetopic.options).forEach(opt => {
-    container.innerHTML += `<label><input type="radio" name="opt" value="${opt}"> ${opt}</label><br>`;
+  // 顯示主題與提示
+  titleEl.innerText = voteTopic.topic;
+  hintEl.innerText = voteTopic.anonymous
+    ? "匿名投票（可重複投票）"
+    : "記名投票（僅能投一次）";
+
+  // 建立投票選項表單
+  const form = document.createElement("form");
+  form.id = "voteForm";
+  Object.keys(voteTopic.options).forEach(opt => {
+    const label = document.createElement("label");
+    label.style.display = "block";
+    const input = document.createElement("input");
+    input.type = "radio";
+    input.name = "opt";
+    input.value = opt;
+    label.appendChild(input);
+    label.appendChild(document.createTextNode(" " + opt));
+    form.appendChild(label);
   });
-  // 加入投票按鈕與結果區塊    
-  container.innerHTML += '<button onclick="submitVote()">送出投票</button>';
-  container.innerHTML += '<div id="voteResult"></div>';
+  sectionEl.appendChild(form);
 
-  showResult(votetopic);  // 顯示目前的投票結果
+  // 投票按鈕
+  const submitBtn = document.createElement("button");
+  submitBtn.innerText = "送出投票";
+  submitBtn.onclick = (e) => {
+    e.preventDefault();
+    submitVote();
+  };
+  sectionEl.appendChild(submitBtn);
+
+  showResult(voteTopic);
 }
 
-// ---------------投票處理函式---------------
+// ------------------ 投票處理 ------------------
 function submitVote() {
-  if (!votetopic) return;
-  // 記名投票時檢查是否已投過票
-  if (!votetopic.anonymous && votetopic.voters[voteuser]) {
+  if (!voteTopic) return;
+
+  if (!voteTopic.anonymous && voteTopic.voters[voteUser]) {
     return alert("你已投過票！");
   }
-  // 檢查是否有選取選項
+
   const selected = document.querySelector('input[name="opt"]:checked');
   if (!selected) return alert("請選擇一個選項！");
-  // 投票數 +1
-  votetopic.options[selected.value]++;
-  // 若為記名投票，紀錄使用者投的選項
-  if (!votetopic.anonymous) {
-    votetopic.voters[voteuser] = selected.value;
+
+  voteTopic.options[selected.value]++;
+
+  if (!voteTopic.anonymous) {
+    voteTopic.voters[voteUser] = selected.value;
   }
-  // 呼叫 storage.js
-  setData("vote_users", voteusers);
-  renderVotePage();  // 重新渲染畫面（會連結果一起更新）
+
+  setData("vote_users", voteUsers);
+  renderVotePage();
 }
 
-// ---------------顯示投票結果函式---------------
+// ------------------ 顯示投票結果 ------------------
 function showResult(data) {
   const resultDiv = document.getElementById("voteResult");
-  const total = Object.values(data.options).reduce((a, b) => a + b, 0);  // 計算總票數
+  const total = Object.values(data.options).reduce((a, b) => a + b, 0);
   resultDiv.innerHTML = "<h4>投票結果</h4>";
-    
-  // 顯示每個選項的票數與百分比長條圖    
+
   for (let opt in data.options) {
     const count = data.options[opt];
     const percent = total > 0 ? ((count / total) * 100).toFixed(1) : 0;
-    resultDiv.innerHTML += `
-      <div>${opt}：${count} 票 (${percent}%)
-        <div class='bar' style='width:${percent}%'></div>
-      </div>
-    `;
+    const bar = `<div style='background:#4caf50;height:8px;margin:4px 0;width:${percent}%'></div>`;
+    resultDiv.innerHTML += `<div>${opt}：${count} 票 (${percent}%)${bar}</div>`;
   }
 }
+
+// ------------------ 初始執行 ------------------
+window.onload = () => {
+  renderVotePage();
+};
