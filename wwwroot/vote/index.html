@@ -1,10 +1,98 @@
-﻿<!DOCTYPE html>
-<html>
+<!DOCTYPE html>
+<html lang="zh-Hant">
 <head>
-    <meta charset="utf-8" />
-    <title></title>
+  <meta charset="UTF-8">
+  <title>投票主題管理</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 40px;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      margin: 6px 0;
+      box-sizing: border-box;
+    }
+
+    .option-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .option-row input {
+      flex: 1;
+      height: 36px;
+      padding: 6px 8px;
+    }
+
+    .option-row button {
+      height: 36px;
+      font-size: 14px;
+      padding: 6px 12px;
+      white-space: nowrap;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 10px 0;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .button-row button {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    .topic-card {
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 12px;
+      margin: 12px 0;
+    }
+
+    .topic-card button {
+      margin: 4px 6px 0 0;
+      padding: 6px 12px;
+      font-size: 14px;
+    }
+      
+  </style>
 </head>
 <body>
-    <h1>自己寫喔</h1>
+  <h2 style="text-align: center">建立新主題</h2>
+  <div style="display: flex; align-items: center; gap: 10px;">
+      <label for="newTopic" style="white-space: nowrap;">主題：</label>
+      <input id="newTopic" type="text" style="flex: 1;">
+  </div>
+  <div class="checkbox-row" style="display: flex; align-items: center; gap: 10px;">
+      <label for="anonCheckbox" style="white-space: nowrap">匿名投票：</label>
+      <input type="checkbox" id="anonCheckbox" style="transform: scale(1.4);">
+  </div>
+    <div id="optionContainer"></div>
+    <div class="button-row">
+      <button onclick="createTopic()">建立主題</button>
+      <button onclick="addOption()">新增選項</button>
+    </div>
+
+  <h2 id="topicHeader">主題列表</h2>
+  <div id="topicList"></div>
+
+  <script src="./js/storage.js"></script>
+  <script src="./js/vote.js"></script>
+  <script src="./js/main.js"></script>
 </body>
 </html>

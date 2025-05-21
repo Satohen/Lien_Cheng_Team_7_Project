@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>投票頁面</title>
+  <!-- 樣式設定區塊 -->
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding-top: 40px;
+    }
+    .container {
+      width: 400px;
+    }
+    .bar {
+      height: 20px;
+      background: lightblue;
+      margin-top: 5px;
+    }
+    input, button {
+      width: 100%;
+      padding: 8px;
+      margin: 8px 0;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+  <!-- 主要內容容器 -->
+  <div class="container">
+    <!-- 顯示投票主題文字 -->
+    <h2 id="topicTitle">載入中...</h2>
+    <!-- 顯示投票提示（例如是否匿名） -->
+    <p id="voteHint" style="font-size: 0.9em; color: gray;"></p>
+    <!-- 投票選項會由 JavaScript 動態產生 -->
+    <div id="voteSection"></div>
+    <!-- 顯示投票結果的區塊（長條圖等） -->
+    <div id="voteResult"></div>
+    <!-- 返回主頁按鈕 -->
+    <button onclick="window.location.href='index.html'">回主頁</button>
+  </div>
+  <!----- JS 載入順序：先工具、再主功能、最後初始化 ----->
+  <!-- 載入工具函式，例如操作 localStorage -->
+  <script src="./js/storage.js"></script>
+  <!-- 投票功能邏輯：渲染畫面、送出投票、顯示結果 -->
+  <script src="./js/vote.js"></script>
+  <!-- 初始化頁面：載入時執行 renderVotePage() -->
+  <script>renderVotePage();</script>
+</body>
+</html>
