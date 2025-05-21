@@ -8,7 +8,7 @@
 
     📂 位置：`wwwroot/vote`
 
-    此模組為獨立的前端投票系統，採用 HTML + JavaScript 建構，並透過 localStorage 暫存資料，模擬後端功能。
+    此模組為獨立的前端投票系統，採用 HTML + JavaScript 建構，並透過 localStorage 暫存資料，模擬後端功能
 
     ### 🔹 檔案說明
 
