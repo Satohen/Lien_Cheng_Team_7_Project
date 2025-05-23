@@ -11,7 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\Login\" />
     <Folder Include="Controllers\Vote\" />
     <Folder Include="Models\Login\" />
     <Folder Include="Models\Vote\" />
