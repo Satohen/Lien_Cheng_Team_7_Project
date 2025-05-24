@@ -1,24 +1,47 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>打卡查詢</title>
-</head>
-<body>
-    <h2>打卡紀錄</h2>
-    <ul id="checkinList"></ul>
+﻿<div class="card shadow-lg">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">打卡區</h4>
+        <span class="text-primary fw-bold" id="clock-display">--:--:--</span>
+    </div>
+    <div class="card-body">
+        <div class="alert alert-info">
+            系統已自動帶入登入使用者：<strong>王小明</strong>
+        </div>
+        <div class="mb-3">
+            <label for="nameInput" class="form-label">姓名</label>
+            <input id="nameInput" type="text" class="form-control" value="王小明" readonly />
+        </div>
+        <div class="d-flex gap-2 mb-3">
+            <button id="btnCheckin" class="btn btn-success">出勤</button>
+            <button id="btnCheckout" class="btn btn-warning">退勤</button>
+        </div>
+        <hr />
+        <h5 class="mt-4">歷史打卡紀錄</h5>
 
-    <script>
-        fetch('/api/checkin/all')
-            .then(res => res.json())
-            .then(data => {
-                const ul = document.getElementById('checkinList');
-                data.forEach(item => {
-                    const li = document.createElement('li');
-                    li.textContent = `${item.employeeName} - ${item.checkinTime}`;
-                    ul.appendChild(li);
-                });
-            });
-    </script>
-</body>
-</html>
+        <div class="row mb-2">
+            <div class="col-md-4">
+                <select id="monthSelector" class="form-select">
+                    <!-- 自動產出月份 -->
+                </select>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="table-light">
+                    <tr>
+                        <th>日期</th>
+                        <th>出勤時間</th>
+                        <th>簽退時間</th>
+                    </tr>
+                </thead>
+                <tbody id="checkinList"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+</script>
