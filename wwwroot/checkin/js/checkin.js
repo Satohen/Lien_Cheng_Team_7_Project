@@ -150,7 +150,5 @@ async function updateCheckinButtonStatus(employeeId) {
     }
 }
 
-
-
 // 檔案最下方
 setTimeout(initCheckinPage, 100);
