@@ -44,6 +44,12 @@
         </tbody>
     </table>
 
+    <div style="text-align: center; margin-top: 10px;">
+        <button onclick="window.location.href='/Index.html'" style="padding: 10px 20px; font-size: 16px; border-radius: 8px; border: none; background-color: #28a745; color: white; cursor: pointer;">
+            回首頁
+        </button>
+    </div>
+
 
     <script>
 
@@ -61,20 +67,20 @@
                 let tbody = $('#account-body');
                 data.forEach(account => {
                     let row = `<tr>
-                <td>${account.username}</td>
-                <td>${account.name}</td>
-                <td>${account.email}</td>
-                <td>
-                    <select data-username="${account.username}" class="role-select">
-                        <option value="User" ${account.role === "User" ? "selected" : ""}>User</option>
-                        <option value="Admin" ${account.role === "Admin" ? "selected" : ""}>Admin</option>
-                    </select>
-                </td>
-                <td>
-                    <button class="update-btn" data-username="${account.username}">更新角色</button>
-                    <button class="delete-btn" data-username="${account.username}">刪除</button>
-                </td>
-            </tr>`;
+                    <td>${account.username}</td>
+                    <td>${account.name}</td>
+                    <td>${account.email}</td>
+                    <td>
+                        <select data-username="${account.username}" class="role-select">
+                            <option value="User" ${account.role === "User" ? "selected" : ""}>User</option>
+                            <option value="Admin" ${account.role === "Admin" ? "selected" : ""}>Admin</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button class="update-btn" data-username="${account.username}">更新角色</button>
+                        <button class="delete-btn" data-username="${account.username}">刪除</button>
+                    </td>
+                </tr>`;
                     tbody.append(row);
                 });
             }
