@@ -13,8 +13,8 @@ namespace 第7小組專題.Controllers.Checkin
 
         public AttendanceController(IConfiguration config)
         {
-            var repo = new AttendanceRepository(config);
-            _service = new AttendanceService(repo);
+            _service = new AttendanceService(config);
+
         }
 
         [HttpPost("yearly")]
@@ -23,9 +23,10 @@ namespace 第7小組專題.Controllers.Checkin
             if (string.IsNullOrWhiteSpace(request.employeeId))
                 return BadRequest("缺少員工代碼");
 
-            var data = _service.GetMonthlyAttendanceDays(request.year, request.employeeId);
-            return Ok(data);
+            var result = _service.GetMonthlySummary(request.year, request.employeeId);
+            return Ok(result);
         }
+
     }
 
- }
+}

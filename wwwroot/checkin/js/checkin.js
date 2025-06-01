@@ -5,6 +5,7 @@ function initCheckinPage() {
     const monthSelector = document.getElementById('monthSelector');
     const btnCheckin = document.getElementById('btnCheckin');
     const btnCheckout = document.getElementById('btnCheckout');
+    const btnExportExcel = document.getElementById('btnExportExcel');
 
     if (!nameInput || !clock || !checkinList || !monthSelector) {
         console.warn('元素尚未準備好，稍後再試...');
@@ -53,24 +54,34 @@ function initCheckinPage() {
         } else {
             data.forEach(item => {
                 const date = item.date?.split('T')[0] || '--';
-                const checkinTime = item.checkInTime?.split('T')[1]?.substring(0, 5) || null;
+                const checkinTime = item.checkInTime?.split('T')[1]?.substring(0, 5) || '';
                 const checkoutTime = item.checkOutTime?.split('T')[1]?.substring(0, 5) || '--';
                 const isLate = item.isLate === true;
-            const isLeave = !!item.leaveType?.trim();
+                const isLeave = !!item.leaveType?.trim();
+                const isWorkday = item.isWorkday === true;
+
                 let tdClass = '';
                 if (isLate) tdClass += ' text-danger fw-bold';
                 if (isLeave) tdClass += ' text-info fst-italic';
+
+                let checkinDisplay = '';
+
+                if (!isWorkday) {
+                    checkinDisplay = '<span class="text-secondary">假日</span>';
+                } else if (checkinTime) {
+                    checkinDisplay = checkinTime;
+                } else if (isLeave) {
+                    checkinDisplay = `${item.leaveType}（請假）`;
+                } else {
+                    checkinDisplay = '<span class="text-warning fw-bold">未出勤</span>'; // 曠班
+                }
+
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                        <td>${date}</td>
-                        <td class="${tdClass.trim()}">
-                        ${
-                            checkinTime ||
-                            (isLeave ? `${item.leaveType}（請假）` : '<span class="text-warning fw-bold">未出勤 ⚠️</span>')
-                        }
-                        </td>
-                        <td>${checkoutTime}</td>
-                    `;
+        <td>${date}</td>
+        <td class="${tdClass.trim()}">${checkinDisplay}</td>
+        <td>${checkoutTime}</td>
+    `;
                 checkinList.appendChild(tr);
             });
         }
@@ -107,6 +118,39 @@ function initCheckinPage() {
         alert(result.message);
         loadCheckins();
     });
+
+    //下載事件
+    btnExportExcel.addEventListener('click', async () => {
+        const selectedMonth = monthSelector.value;
+
+        try {
+            const res = await fetch('/api/checkin/export-csv', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    employeeId: 1,
+                    month: selectedMonth
+                })
+            });
+
+            if (!res.ok) throw new Error('下載失敗');
+
+            const blob = await res.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `出勤紀錄_${selectedMonth}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+        } catch (err) {
+            alert('下載失敗，請稍後再試');
+            console.error(err);
+        }
+    });
+
+
 
     // ➤ 月份變更事件
     monthSelector.addEventListener('change', loadCheckins);

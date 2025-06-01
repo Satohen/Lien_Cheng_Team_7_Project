@@ -43,6 +43,12 @@ namespace 第7小組專題.Controllers.Checkin
             return Ok(record);
         }
 
+        [HttpPost("export-csv")]
+        public IActionResult ExportCsv([FromBody] ExportRequest req)
+        {
+            var csvBytes = _service.GenerateAttendanceCsv(req.EmployeeId, req.Month);
+            return File(csvBytes, "text/csv", $"出勤紀錄_{req.Month}.csv");
+        }
 
 
     }

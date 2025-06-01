@@ -28,5 +28,8 @@ namespace 第7小組專題.Models.Checkin
         public string? leaveType { get; set; } //請假類型
 
         public string? leaveStatus { get; set; } //請假狀態
+
+        public bool isWorkday { get; set; }
+
     }
 }

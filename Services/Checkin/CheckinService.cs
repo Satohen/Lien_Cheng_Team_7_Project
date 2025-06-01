@@ -1,4 +1,5 @@
-﻿using 第7小組專題.Models.Checkin;
+﻿using System.Text;
+using 第7小組專題.Models.Checkin;
 using 第7小組專題.Repository.Checkin;
 
 namespace 第7小組專題.Services.Checkin
@@ -60,6 +61,36 @@ namespace 第7小組專題.Services.Checkin
         {
             return _repo.GetRecordByDate(employeeId, date);
         }
+
+        public byte[] GenerateAttendanceCsv(int employeeId, string month)
+        {
+            var records = GetCheckinsByMonth(employeeId, month);
+            var sb = new StringBuilder();
+
+            // 加上 BOM：\uFEFF
+            sb.Append("\uFEFF");  //  Excel 識別 UTF-8 編碼關鍵
+
+            sb.AppendLine("日期,出勤時間,退勤時間,狀態");
+
+            foreach (var r in records)
+            {
+                var date = r.date.ToString("yyyy-MM-dd");
+                var checkin = r.checkInTime?.ToString("HH:mm") ?? "";
+                var checkout = r.checkOutTime?.ToString("HH:mm") ?? "";
+                string status;
+                if (!r.isWorkday) status = "假日";
+                else if (string.IsNullOrEmpty(checkin) && string.IsNullOrEmpty(r.leaveType)) status = "曠班";
+                else if (!string.IsNullOrEmpty(r.leaveType)) status = "請假";
+                else status = "正常";
+
+                sb.AppendLine($"{date},{checkin},{checkout},{status}");
+            }
+
+            return Encoding.UTF8.GetBytes(sb.ToString());
+        }
+
+
+
 
     }
 }
