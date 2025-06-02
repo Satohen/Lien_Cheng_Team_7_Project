@@ -12,7 +12,12 @@ namespace 第7小組專題.Controllers.Login
             return View();
         }
 
-        string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Database=account;User ID=don1;Password=Qw669668;Trusted_Connection=True";
+        private readonly string connectionString;
+
+        public loginController(IConfiguration config)
+        {
+            connectionString = config.GetConnectionString("DefaultConnection")!;
+        }
         [HttpPost("login")]
         public IActionResult login(string username, string password)
         {
