@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>員工打卡系統</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+    <style>
+        html,
+        body {
+            height: 100%;
+            background-color: #f8f9fa;
+        }
+
+        .container-fluid,
+        .row {
+            height: 100%;
+        }
+
+        .sidebar {
+            min-height: 100%;
+            background-color: #343a40;
+            padding-top: 1rem;
+        }
+
+        .sidebar a {
+            color: white;
+            padding: 10px 20px;
+            display: block;
+            text-decoration: none;
+        }
+
+        .sidebar a:hover {
+            background-color: #495057;
+        }
+
+        #main-content {
+            overflow-y: auto;
+            max-height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 上方導覽列 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">員工管理系統</a>
+            <span class="navbar-text text-white ms-auto">歡迎使用</span>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- 側邊選單 -->
+            <div class="col-md-2 sidebar">
+                <a href="#" onclick="loadPage('./checkin.html')"><i class="bi bi-house"></i> 打卡</a>
+                <a href="#" onclick="loadPage('./attendanceStats.html')"><i class="bi bi-graph-up"></i> 出勤統計</a>
+                <a href="#" onclick="loadPage('vote/index.html')"><i class="bi bi-box"></i> 投票模組</a>
+                <a href="#" onclick="loadPage('./leaveApply.html')"> <i class="bi bi-calendar-plus"></i> 請假
+                    <a href="#" onclick="loadPage('./personal.html')"><i class="bi bi-person-lines-fill"></i>
+                        員工資訊</a>
+            </div>
+
+            <!-- 主內容區域 -->
+            <div id="main-content" class="col-md-10 p-4">
+                <!-- 初始可選擇預設載入內容或留空由 JavaScript 載入 -->
+                <div class="text-center text-muted">請選擇左側功能</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function loadPage(page) {
+            fetch(page)
+                .then(res => res.text())
+                .then(html => {
+                    document.getElementById('main-content').innerHTML = html;
+
+                    // 根據頁面決定要加載哪支 JS
+                    const script = document.createElement('script');
+                    if (page.includes('./checkin.html')) {
+                        script.src = './js/checkin.js';
+                    } else if (page.includes('./attendanceStats.html')) {
+                        script.src = './js/attendanceStats.js';
+                    } else if (page.includes('./personal.html')) {
+                        script.src = './js/personal.js';
+                    } else if (page.includes('./leaveApply.html')) {
+                        script.src = './js/leaveApply.js';
+                    } else if (page.includes('vote/index.html')) {
+                        script.src = 'js/vote.js';
+                    }
+
+                    // 避免重複加載
+                    document.querySelectorAll('script[data-dynamic]').forEach(e => e.remove());
+
+                    // 註記為動態腳本
+                    script.setAttribute('data-dynamic', 'true');
+                    document.body.appendChild(script);
+                    script.onload = () => console.log(`${script.src} loaded!`);
+                    document.body.appendChild(script);  
+                });
+
+
+        }
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+
+</html>
