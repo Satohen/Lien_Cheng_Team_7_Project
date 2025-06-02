@@ -18,35 +18,55 @@ namespace 第7小組專題.Controllers.Checkin
         [HttpPost("history")]
         public IActionResult GetByMonth([FromBody]  CheckinQueryRequest request)
         {
-            var data = _service.GetCheckinsByMonth(request.employeeId, request.month);
+            var employeeId = HttpContext.Session.GetInt32("id");
+            if (employeeId == null)
+                return Unauthorized("尚未登入");
+
+            var data = _service.GetCheckinsByMonth(employeeId.Value, request.month);
             return Ok(data);
         }
 
         [HttpPost("checkin")]
         public IActionResult CheckIn([FromBody] CheckinRequest request)
         {
-            var result = _service.CheckIn(request.employeeId);
+            var employeeId = HttpContext.Session.GetInt32("id");
+            if (employeeId == null)
+                return Unauthorized("尚未登入");
+
+            var result = _service.CheckIn(employeeId.Value);
             return Ok(result);
         }
 
         [HttpPost("checkout")]
         public IActionResult CheckOut([FromBody] CheckinRequest request)
         {
-            var result = _service.CheckOut(request.employeeId);
+            var employeeId = HttpContext.Session.GetInt32("id");
+            if (employeeId == null)
+                return Unauthorized("尚未登入");
+
+            var result = _service.CheckOut(employeeId.Value);
             return Ok(result);
         }
 
         [HttpPost("today")]
         public IActionResult GetTodayRecord([FromBody] CheckinRequest request)
         {
-            var record = _service.GetRecordByDate(request.employeeId, DateTime.Today);
+            var employeeId = HttpContext.Session.GetInt32("id");
+            if (employeeId == null)
+                return Unauthorized("尚未登入");
+
+            var record = _service.GetRecordByDate(employeeId.Value, DateTime.Today);
             return Ok(record);
         }
 
         [HttpPost("export-csv")]
         public IActionResult ExportCsv([FromBody] ExportRequest req)
         {
-            var csvBytes = _service.GenerateAttendanceCsv(req.EmployeeId, req.Month);
+            var employeeId = HttpContext.Session.GetInt32("id");
+            if (employeeId == null)
+                return Unauthorized("尚未登入");
+
+            var csvBytes = _service.GenerateAttendanceCsv(employeeId.Value, req.Month);
             return File(csvBytes, "text/csv", $"出勤紀錄_{req.Month}.csv");
         }
 

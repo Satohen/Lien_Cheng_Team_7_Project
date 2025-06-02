@@ -12,7 +12,7 @@ namespace 第7小組專題.Repository.Checkin
             _connStr = config.GetConnectionString("DefaultConnection");
         }
 
-        public List<MonthlyAttendanceSummary> FetchMonthlyAttendanceSummary(int year, string employeeId)
+        public List<MonthlyAttendanceSummary> FetchMonthlyAttendanceSummary(int year, int employeeId)
         {
             var result = new List<MonthlyAttendanceSummary>();
 

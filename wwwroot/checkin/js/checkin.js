@@ -6,11 +6,18 @@ function initCheckinPage() {
     const btnCheckin = document.getElementById('btnCheckin');
     const btnCheckout = document.getElementById('btnCheckout');
     const btnExportExcel = document.getElementById('btnExportExcel');
-
+    const currentUserId = localStorage.getItem('id');
+    const currentUsername = localStorage.getItem('username');
+    if (!currentUserId || !currentUsername) {
+        alert('尚未登入，請重新登入');
+        return;
+    }
     if (!nameInput || !clock || !checkinList || !monthSelector) {
         console.warn('元素尚未準備好，稍後再試...');
         return setTimeout(initCheckinPage, 100);
     }
+
+    document.getElementById('display-name').textContent = currentUsername;
 
     // ➤ 建立月份下拉選單（近六個月）
     function initMonthSelector() {
@@ -78,10 +85,10 @@ function initCheckinPage() {
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-        <td>${date}</td>
-        <td class="${tdClass.trim()}">${checkinDisplay}</td>
-        <td>${checkoutTime}</td>
-    `;
+                    <td>${date}</td>
+                    <td class="${tdClass.trim()}">${checkinDisplay}</td>
+                    <td>${checkoutTime}</td>
+                    `;
                 checkinList.appendChild(tr);
             });
         }

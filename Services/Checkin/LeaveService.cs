@@ -15,6 +15,8 @@ namespace 第7小組專題.Services.Checkin
 
         public object ApplyLeave(LeaveApplyRequest request, IFormFile? attachment)
         {    // 檢查：如果重疊則直接拒絕
+
+
             if (_repo.HasOverlappingLeave(request.employeeId, request.fromDate, request.toDate))
             {
                 return new { message = "您已申請過相同日期範圍內的請假，請勿重複申請。" };

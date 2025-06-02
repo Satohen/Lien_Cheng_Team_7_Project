@@ -3,7 +3,19 @@ function initPersonalPage() {
     const leaveTableBody = document.getElementById('leaveTableBody');
     const pageSizeSelect = document.getElementById('pageSizeSelect');
     const paginationContainer = document.getElementById('pagination');
-    
+    const currentUserId = localStorage.getItem('id');
+    const currentUsername = localStorage.getItem('username');
+    const currentEmail = localStorage.getItem('email') || '';
+    const currentRole = localStorage.getItem('role') || '';
+
+    if (!currentUserId || !currentUsername) {
+        alert('尚未登入，請重新登入');
+        return;
+    }
+    document.getElementById('usernameInput').value = currentUsername;
+    document.getElementById('emailInput').value = currentEmail;
+    document.getElementById('roleInput').value = currentRole;
+
     let currentPage = 1;
     let pageSize = 10;
     let totalPages = 1;
