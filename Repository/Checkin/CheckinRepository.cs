@@ -26,32 +26,32 @@ namespace 第7小組專題.Repository.Checkin
             {
                 conn.Open();
                 var cmd = new SqlCommand(@"
-WITH Dates AS (
-    SELECT @FirstDay AS Date
-    UNION ALL
-    SELECT DATEADD(DAY, 1, Date)
-    FROM Dates
-    WHERE DATEADD(DAY, 1, Date) <= @LastDay
-)
-SELECT 
-    D.Date,
-    A.Id,
-    A.EmployeeId,
-    A.CheckInTime,
-    A.CheckOutTime,
-    A.IsLate,
-    A.Note,
-    L.LeaveType,
-    L.Status AS LeaveStatus,
-    CASE WHEN W.IsWorkday = 0 THEN CAST(0 AS BIT) ELSE CAST(1 AS BIT) END AS IsWorkday
-FROM Dates D
-LEFT JOIN AttendanceRecords A
-    ON A.Date = D.Date AND A.EmployeeId = @EmployeeId
-LEFT JOIN LeaveRequests L
-    ON L.LeaveDate = D.Date AND L.EmployeeId = @EmployeeId
-LEFT JOIN WorkingCalendar W
-    ON W.WorkDate = D.Date
-OPTION (MAXRECURSION 31)", conn);
+                WITH Dates AS (
+                    SELECT @FirstDay AS Date
+                    UNION ALL
+                    SELECT DATEADD(DAY, 1, Date)
+                    FROM Dates
+                    WHERE DATEADD(DAY, 1, Date) <= @LastDay
+                )
+                SELECT 
+                    D.Date,
+                    A.Id,
+                    A.EmployeeId,
+                    A.CheckInTime,
+                    A.CheckOutTime,
+                    A.IsLate,
+                    A.Note,
+                    L.LeaveType,
+                    L.Status AS LeaveStatus,
+                    CASE WHEN W.IsWorkday = 0 THEN CAST(0 AS BIT) ELSE CAST(1 AS BIT) END AS IsWorkday
+                FROM Dates D
+                LEFT JOIN AttendanceRecords A
+                    ON A.Date = D.Date AND A.EmployeeId = @EmployeeId
+                LEFT JOIN LeaveRequests L
+                    ON L.LeaveDate = D.Date AND L.EmployeeId = @EmployeeId
+                LEFT JOIN WorkingCalendar W
+                    ON W.WorkDate = D.Date
+                OPTION (MAXRECURSION 31)", conn);
 
                 cmd.Parameters.AddWithValue("@EmployeeId", employeeId);
                 cmd.Parameters.AddWithValue("@FirstDay", firstDay);

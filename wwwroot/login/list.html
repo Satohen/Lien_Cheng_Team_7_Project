@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Account List</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <style>
+        table {
+            width: 80%;
+            margin: auto;
+            border-collapse: collapse;
+            margin-top: 50px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <h2>帳號清單</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>帳號</th>
+                <th>姓名</th>
+                <th>Email</th>
+                <th>角色</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody id="account-body">
+        </tbody>
+    </table>
+
+    <div style="text-align: center; margin-top: 10px;">
+        <button onclick="window.location.href='/Index.html'" style="padding: 10px 20px; font-size: 16px; border-radius: 8px; border: none; background-color: #28a745; color: white; cursor: pointer;">
+            回首頁
+        </button>
+    </div>
+
+
+    <script>
+
+        const role = localStorage.getItem("role");
+
+        if (role !== "Admin") {
+            alert("無權限瀏覽此頁面！");
+            window.location.href = "/Index.html"; // 或其他你想導回的頁面
+        }
+
+        $.ajax({
+            url: '/login/list',
+            type: 'GET',
+            success: function (data) {
+                let tbody = $('#account-body');
+                data.forEach(account => {
+                    let row = `<tr>
+                    <td>${account.username}</td>
+                    <td>${account.name}</td>
+                    <td>${account.email}</td>
+                    <td>
+                        <select data-username="${account.username}" class="role-select">
+                            <option value="User" ${account.role === "User" ? "selected" : ""}>User</option>
+                            <option value="Admin" ${account.role === "Admin" ? "selected" : ""}>Admin</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button class="update-btn" data-username="${account.username}">更新角色</button>
+                        <button class="delete-btn" data-username="${account.username}">刪除</button>
+                    </td>
+                </tr>`;
+                    tbody.append(row);
+                });
+            }
+        });
+
+        // 更新角色
+        $(document).on("click", ".update-btn", function () {
+            const username = $(this).data("username");
+            const role = $(`select[data-username='${username}']`).val();
+
+            $.post("/login/update-role", { username, role }, function (res) {
+                if (res === "success") {
+                    alert("角色已更新！");
+                } else {
+                    alert("更新失敗！");
+                }
+            });
+        });
+
+        // 刪除帳號
+        $(document).on("click", ".delete-btn", function () {
+            const username = $(this).data("username");
+            if (confirm(`確定要刪除帳號「${username}」嗎？`)) {
+                $.post("/login/delete-account", { username }, function (res) {
+                    if (res === "success") {
+                        alert("帳號已刪除！");
+                        location.reload(); // 重新整理表格
+                    } else {
+                        alert("刪除失敗！");
+                    }
+                });
+            }
+        });
+
+    </script>
+</body>
+</html>
