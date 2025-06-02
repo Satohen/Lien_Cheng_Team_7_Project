@@ -125,35 +125,52 @@
     </div>
 </body>
 <script>
-    
-    const url = '/login/signup'
+    const url = '/login/signup';
 
-    function signup() {
-        let u = $("#username").val();
-        let p = $("#password").val();
-        let n = $("#name").val();
-        let e = $("#email").val();
-        let re = $("#re-password").val();
-        if (re != p) {
-            $("#test").text("密碼不一致");
-        } else {
-            $.ajax({
-                url,
-                data: { username: u, password: p, name: n, email: e },
-                type: 'POST',
-                success: res => {
-                    if (res === "success") {
-                        window.location.href = "/login/Index.html"; // 跳轉的頁面
-                    } else {
-                        $("#test").text("註冊失敗！");//修改
-                    }
-                },
-                error: err => console.log(err)
-            })
-        }
-        
+    function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
     }
 
-    $("#sign-btn").click(signup)
+    function signup() {
+        let u = $("#username").val().trim();
+        let p = $("#password").val().trim();
+        let n = $("#name").val().trim();
+        let e = $("#email").val().trim();
+        let re = $("#re-password").val().trim();
+
+        if (!isValidEmail(e)) {
+            $("#test").text("請輸入有效的 Email 格式");
+            return;
+        }
+
+        if (p !== re) {
+            $("#test").text("密碼不一致");
+            return;
+        }
+
+        // 清除錯誤訊息
+        $("#test").text("");
+
+        $.ajax({
+            url,
+            data: { username: u, password: p, name: n, email: e },
+            type: 'POST',
+            success: res => {
+                if (res === "success") {
+                    window.location.href = "/login/Index.html";
+                } else {
+                    $("#test").text("註冊失敗！");
+                }
+            },
+            error: err => {
+                console.log(err);
+                $("#test").text("伺服器錯誤，請稍後再試");
+            }
+        });
+    }
+
+    $("#sign-btn").click(signup);
 </script>
+
 </html>
