@@ -27,28 +27,21 @@ if (!app.Environment.IsDevelopment())
 }
 
 
-
-
-
 app.UseSession();
-
-
-
 
 app.UseHttpsRedirection();
 //導向首頁
-app.UseDefaultFiles();  // 讓 / 自動開 wwwroot/index.html
+app.UseDefaultFiles(new DefaultFilesOptions
+{
+    DefaultFileNames = new List<string> { "login/index.html" } // 不用加 `/`
+});
+app.UseStaticFiles();
 app.UseStaticFiles();  // 支援靜態 HTML、JS、CSS
-
 app.UseRouting();
-
 app.UseAuthorization();
-
 //不用Razor
 //app.MapControllerRoute(
 //    name: "default",
 //    pattern: "{controller=Home}/{action=Index}/{id?}");
-
 app.MapControllers(); // 使用 Web API 控制器
-
 app.Run();
