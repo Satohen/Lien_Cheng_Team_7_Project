@@ -32,9 +32,9 @@ namespace 第7小組專題.Repository.Checkin
                     COUNT(DISTINCT CASE WHEN ISNULL(W.IsWorkday, 1) = 1 THEN D.Date END) AS TotalDays,
                     COUNT(DISTINCT CASE WHEN ISNULL(W.IsWorkday, 1) = 1 AND A.Id IS NOT NULL THEN D.Date END) AS PresentDays,
                     COUNT(DISTINCT CASE WHEN ISNULL(W.IsWorkday, 1) = 1 AND L.LeaveType IS NOT NULL THEN D.Date END) AS LeaveDays,
-                    COUNT(DISTINCT CASE WHEN ISNULL(W.IsWorkday, 1) = 1 AND L.LeaveType = '事假' THEN D.Date END) AS PersonalLeaveDays,
-                    COUNT(DISTINCT CASE WHEN ISNULL(W.IsWorkday, 1) = 1 AND L.LeaveType = '病假' THEN D.Date END) AS SickLeaveDays,
-                    COUNT(DISTINCT CASE WHEN ISNULL(W.IsWorkday, 1) = 1 AND L.LeaveType = '特休' THEN D.Date END) AS AnnualLeaveDays
+                    COUNT(DISTINCT CASE WHEN ISNULL(W.IsWorkday, 1) = 1  AND LTRIM(RTRIM(LeaveType)) LIKE N'%事假%' THEN D.Date END) AS PersonalLeaveDays,
+                    COUNT(DISTINCT CASE WHEN ISNULL(W.IsWorkday, 1) = 1 AND LTRIM(RTRIM(LeaveType)) LIKE N'%病假%' THEN D.Date END) AS SickLeaveDays,
+                    COUNT(DISTINCT CASE WHEN ISNULL(W.IsWorkday, 1) = 1 AND LTRIM(RTRIM(LeaveType)) LIKE N'%特休%' THEN D.Date END) AS AnnualLeaveDays
                 FROM Dates D
                 LEFT JOIN WorkingCalendar W ON W.WorkDate = D.Date
                 LEFT JOIN AttendanceRecords A ON A.Date = D.Date AND A.EmployeeId = @EmployeeId

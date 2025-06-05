@@ -73,7 +73,7 @@ function initLeaveForm() {
 
         } catch (err) {
             const text = await res.text();
-            throw new Error(text); // 👈 丟出來給 catch 處理
+            throw new Error(text); //  丟出來給 catch 處理
             console.error('請求發生錯誤', err);
             alert('申請失敗，請稍後再試。');
         }

@@ -87,12 +87,12 @@ namespace 第7小組專題.Repository.Checkin
             {
                 result.Add(new LeaveRecordModels
                 {
-                    fromDate = (DateTime)reader["LeaveDate"],
-                    toDate = (DateTime)reader["EndDate"],
-                    leaveType = reader["LeaveType"].ToString(),
-                    reason = reader["Reason"]?.ToString(),
-                    status = reader["Status"].ToString(),
-                    attachmentPath = reader["AttachmentPath"]?.ToString()
+                    fromDate = reader["LeaveDate"] == DBNull.Value ? DateTime.MinValue : (DateTime)reader["LeaveDate"],
+                    toDate = reader["EndDate"] == DBNull.Value ? DateTime.MinValue : (DateTime)reader["EndDate"],
+                    leaveType = reader["LeaveType"]?.ToString(),
+                    reason = reader["Reason"] == DBNull.Value ? null : reader["Reason"].ToString(),
+                    status = reader["Status"]?.ToString(),
+                    attachmentPath = reader["AttachmentPath"] == DBNull.Value ? null : reader["AttachmentPath"].ToString()
                 });
             }
 
