@@ -45,7 +45,7 @@
     </table>
 
     <div style="text-align: center; margin-top: 10px;">
-        <button onclick="window.location.href='/Index.html'" style="padding: 10px 20px; font-size: 16px; border-radius: 8px; border: none; background-color: #28a745; color: white; cursor: pointer;">
+        <button onclick="window.location.href= '/checkin/main.html'" style="padding: 10px 20px; font-size: 16px; border-radius: 8px; border: none; background-color: #28a745; color: white; cursor: pointer;">
             回首頁
         </button>
     </div>
@@ -57,7 +57,7 @@
 
         if (role !== "Admin") {
             alert("無權限瀏覽此頁面！");
-            window.location.href = "/Index.html"; // 或其他你想導回的頁面
+            window.location.href = "/checkin/main.html"; // 或其他你想導回的頁面
         }
 
         $.ajax({
